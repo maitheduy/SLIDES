@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>DUYslidesAI - Hạt nhân và Ảnh của Ma trận</title>
+ 
+  <!-- Font Awesome 5.15.4 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ 
+  <!-- MathJax v3 -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [["$","$"],["\\(","\\)"]],
+        displayMath: [["$$","$$"],["\\[","\\]"]],
+        macros: {
+          mathbf: ["{\\bf #1}", 1]
+        }
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+ 
+  <style>
+    :root {
+      --color-memo: #16a085; --bg-memo: #f0fdfa;
+      --color-activity: #d35400; --bg-activity: #fff8f2;
+      --color-example: #2980b9; --bg-example: #f2f9ff;
+      --color-exercise: #8e44ad; --bg-exercise: #fbf5ff;
+      --color-proof: #0077b6; --bg-proof: #f2fbff;
+      --color-note: #c29304; --bg-note: #fffcf2;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.7; background-color: #f0f2f5; color: #3a3a3a; padding: 20px; }
+    .container { max-width: 980px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+    .header h1 { font-size: 2.2rem; color: #1a5276; margin-bottom: 8px; }
+    .header .author { font-size: 1.05rem; color: #555; font-style: italic; }
+ 
+    .box { position: relative; padding: 16px; padding-top: 25px; padding-bottom: 35px; padding-right: 25px; margin: 20px 0; border: 1px solid #e0e0e0; border-left-width: 5px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .box-title { font-size: 1.16rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; }
+    .box-title .fas { margin-right: 10px; font-size: 1.05em; }
+ 
+    .reset-trigger-left { position: absolute; top: 0; left: 0; width: 5px; height: 100%; cursor: pointer; border-top-left-radius: 8px; border-bottom-left-radius: 8px; transition: background-color 0.2s ease-in-out; }
+    .reset-trigger-left:hover { background-color: rgba(231, 76, 60, 0.3); }
+ 
+    ul, ol { padding-left: 25px; }
+ 
+    .trigger-bar { height: 10px; width: 100%; cursor: pointer; opacity: 0.85; transition: opacity 0.2s; }
+    .trigger-bar:hover { opacity: 1; }
+    .trigger-top { position: absolute; top: 0; left: 0; width: calc(100% - 10px); border-top-left-radius: 8px; overflow: hidden; }
+    .trigger-image-link { background: linear-gradient(90deg, #9b59b6, #3498db, #1abc9c); }
+    .trigger-right { position: absolute; top: 0; right: 0; width: 10px; height: 100%; background: linear-gradient(180deg, #00c6ff, #0072ff); cursor: pointer; opacity: 0.85; transition: opacity 0.2s; border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
+    .trigger-right:hover { opacity: 1; }
+    .triggers-bottom { position: absolute; bottom: 0; left: 0; width: calc(100% - 10px); border-bottom-left-radius: 8px; overflow: hidden; }
+    .trigger-audio { background: linear-gradient(90deg, #f1c40f, #e67e22, #d35400); }
+    .trigger-image-file { background: linear-gradient(90deg, #3498db, #2ecc71, #e74c3c, #f39c12); }
+ 
+    .media-content-area { background: rgba(249, 249, 249, 0.7); border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-top: 18px; display: none; }
+    .image-placeholder { display: flex; justify-content: center; align-items: center; min-height: 120px; border: 2px dashed #ccc; border-radius: 8px; color: #888; text-align: center; padding: 10px; font-size: 0.9em; }
+    .image-preview { max-width: 100%; max-height: 300px; display: none; margin: 0 auto; border-radius: 8px; }
+    .audio-container { margin-top: 15px; min-height: 25px; }
+    .embed-app-container { display: none; margin-top: 15px; }
+    .embed-app-container iframe { width: 100%; height: 450px; border: 1px solid #ddd; border-radius: 8px; }
+ 
+    .custom-audio-player { display: none; height: 24px; width: 100%; background: linear-gradient(90deg, #8e44ad, #3498db, #16a085); border-radius: 12px; cursor: pointer; padding: 0 15px; align-items: center; opacity: 0.9; }
+    .play-pause-btn { width: 0; height: 0; border-style: solid; border-width: 7px 0 7px 12px; border-color: transparent transparent transparent #fff; }
+    .play-pause-btn.playing { border-style: double; border-width: 0 0 0 10px; height: 14px; border-color: #fff; }
+    .embed-audio-container { display: none; }
+    .embed-audio-container iframe { border: none; border-radius: 8px; width: 100%; height: 60px; }
+    audio, .file-input { display: none; }
+ 
+    .memo-box { background-color: var(--bg-memo); border-left-color: var(--color-memo); } .memo-box .box-title { color: var(--color-memo); }
+    .activity-box { background-color: var(--bg-activity); border-left-color: var(--color-activity); } .activity-box .box-title { color: var(--color-activity); }
+    .example-box { background-color: var(--bg-example); border-left-color: var(--color-example); } .example-box .box-title { color: var(--color-example); }
+    .exercise-box { background-color: var(--bg-exercise); border-left-color: var(--color-exercise); } .exercise-box .box-title { color: var(--color-exercise); }
+    .proof-box { background-color: var(--bg-proof); border-left-color: var(--color-proof); } .proof-box .box-title { color: var(--color-proof); }
+    .note-box { background-color: var(--bg-note); border-left-color: var(--color-note); } .note-box .box-title { color: var(--color-note); }
+ 
+    .section-container h2 { font-size: 1.6rem; color: #2874a6; margin: 34px 0 12px; padding-bottom: 6px; border-bottom: 2px solid #3498db; }
+    h3 { font-size: 1.4rem; color: #34495e; margin-top: 25px; margin-bottom: 10px; }
+    .math-term strong { color: #c0392b; }
+    .math-term em { color: #7f8c8d; font-style: italic; }
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    th { background-color: #f7f9fa; font-weight: 600; }
+  </style>
+</head>
+<body>
+ 
+<div class="container">
+  <div class="header">
+    <h1>Hạt nhân và Ảnh của Ma trận (Null Space & Image)</h1>
+    <p class="author">Duymt2 Đại học Mai Duy Khánh Linh</p>
+  </div>
+
+  <div class="box note-box" data-id="audio_lecture">
+    <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div>
+    <div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)" title="Nhập link ảnh"></div></div>
+    <div class="trigger-right" onclick="promptAppUrl(this)" title="Nhúng ứng dụng/web"></div>
+    <div class="box-title"><i class="fas fa-headphones"></i> Âm thanh bài giảng</div>
+    <p>Bạn có thể nghe giảng toàn bộ bài học qua audio được nhúng sẵn dưới đây.</p>
+    <div class="media-content-area" style="display: block;">
+      <img class="image-preview" alt="Xem trước"><div class="image-placeholder" style="display: none;">(Khu vực hiển thị ảnh/ứng dụng)</div>
+      <div class="embed-app-container"></div>
+      <div class="audio-container">
+          <div class="custom-audio-player"><div class="play-pause-btn"></div></div>
+          <div class="embed-audio-container" style="display: block;">
+              <iframe src="https://vocaroo.com/embed/1bpCuRzHIrTT?autoplay=0" allow="autoplay"></iframe>
+          </div>
+          <audio></audio>
+      </div>
+    </div>
+    <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)" title="Nhập âm thanh (mp3) hoặc mã nhúng"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)" title="Tải ảnh từ máy"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+ 
+  <div class="box note-box" data-id="meta_info">
+    <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div>
+    <div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)" title="Nhập link ảnh"></div></div>
+    <div class="trigger-right" onclick="promptAppUrl(this)" title="Nhúng ứng dụng/web"></div>
+    <div class="box-title"><i class="fas fa-info-circle"></i> Thông tin bài học</div>
+    <p><strong>Lớp/Khối:</strong> Đại số tuyến tính<br>
+    <strong>Thời lượng:</strong> 25 phút<br>
+    <strong>Thiết bị/ĐDDH:</strong> Bảng, bút màu, máy chiếu.</p>
+    <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+    <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)" title="Nhập âm thanh (mp3) hoặc mã nhúng"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)" title="Tải ảnh từ máy"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+ 
+  <div class="box memo-box" data-id="goals">
+    <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div>
+    <div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)" title="Nhập link ảnh"></div></div>
+    <div class="trigger-right" onclick="promptAppUrl(this)" title="Nhúng ứng dụng/web"></div>
+    <div class="box-title"><i class="fas fa-lightbulb"></i> Mục tiêu</div>
+    <p>Sau buổi học này, chúng mình sẽ có thể:</p>
+    <ul>
+      <li>"Giải mã" được hai khái niệm quan trọng là <span class="math-term"><strong>hạt nhân</strong> (<em>null space</em>)</span> và <span class="math-term"><strong>ảnh</strong> (<em>image</em>)</span> của một ma trận.</li>
+      <li>Nắm vững "chiêu thức" <span class="math-term"><strong>biến đổi Gauss</strong> (<em>Gaussian elimination</em>)</span> để tìm hạt nhân và ảnh một cách hiệu quả.</li>
+      <li>Tự tin trình bày lời giải, tìm được các vector cơ sở cho hai không gian này.</li>
+    </ul>
+    <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+    <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)" title="Nhập âm thanh (mp3) hoặc mã nhúng"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)" title="Tải ảnh từ máy"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+ 
+  <div class="section-container"><h2>1. Từ khóa & khái niệm</h2></div>
+ 
+  <div class="box note-box" data-id="keywords">
+    <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div>
+    <div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)" title="Nhập link ảnh"></div></div>
+    <div class="trigger-right" onclick="promptAppUrl(this)" title="Nhúng ứng dụng/web"></div>
+    <div class="box-title"><i class="fas fa-key"></i> Bảng thuật ngữ</div>
+    <table>
+      <thead><tr><th>Thuật ngữ</th><th>Diễn giải nhanh (có thể thêm ẩn dụ)</th></tr></thead>
+      <tbody>
+        <tr><td><span class="math-term"><strong>Hạt nhân</strong> (<em>Null space / Kernel</em>)</span></td><td>Tập hợp những vector "tàng hình". Khi bị ma trận A tác động vào, chúng đều biến thành vector không $\mathbf{0}$. Giống như bỏ nguyên liệu vào máy mà không ra sản phẩm gì cả!</td></tr>
+        <tr><td><span class="math-term"><strong>Ảnh</strong> (<em>Image / Column space</em>)</span></td><td>Tập hợp tất cả các vector kết quả mà ma trận A có thể "tạo ra". Đây chính là "thế giới" các sản phẩm mà cỗ máy ma trận A có thể sản xuất được.</td></tr>
+        <tr><td><span class="math-term"><strong>Biến đổi Gauss</strong> (<em>Gaussian elimination</em>)</span></td><td>"Con dao pha" đa năng giúp chúng ta dọn dẹp ma trận về dạng đơn giản hơn, từ đó nhìn thấu cả hạt nhân lẫn ảnh.</td></tr>
+      </tbody>
+    </table>
+    <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+    <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)" title="Nhập âm thanh (mp3) hoặc mã nhúng"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)" title="Tải ảnh từ máy"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+ 
+  <div class="box activity-box" data-id="warmup">
+    <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div>
+    <div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)" title="Nhập link ảnh"></div></div>
+    <div class="trigger-right" onclick="promptAppUrl(this)" title="Nhúng ứng dụng/web"></div>
+    <div class="box-title"><i class="fas fa-laugh-beam"></i> Khởi động vui: Cỗ máy biến đổi</div>
+    <p>Tưởng tượng ma trận A là một cỗ máy biến đổi.</p>
+    <ul>
+        <li><strong>Hạt nhân (Null Space):</strong> Những "nguyên liệu" nào khi cho vào máy thì máy... im re, không tạo ra sản phẩm nào cả (kết quả là $\mathbf{0}$)?</li>
+        <li><strong>Ảnh (Image):</strong> Cỗ máy này có thể tạo ra những loại "sản phẩm" nào?</li>
+    </ul>
+    <p>Bài học hôm nay sẽ giúp chúng ta trả lời hai câu hỏi này chỉ bằng một công cụ duy nhất!</p>
+    <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+    <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)" title="Nhập âm thanh (mp3) hoặc mã nhúng"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)" title="Tải ảnh từ máy"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+ 
+  <div class="section-container"><h2>2. Nội dung cốt lõi</h2></div>
+ 
+  <div class="box note-box" data-id="def_nullspace">
+      <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div>
+      <div class="box-title"><i class="fas fa-scroll"></i> Định nghĩa: Hạt nhân của ma trận A</div>
+      <p><span class="math-term"><strong>Hạt nhân</strong> (<em>Null space</em>)</span> của ma trận $A$, ký hiệu là $N(A)$ hoặc $Ker(A)$, là tập hợp tất cả các vector $\mathbf{x}$ sao cho $A\mathbf{x} = \mathbf{0}$.</p>
+      $$ N(A) = \{ \mathbf{x} \in \mathbb{R}^n \mid A\mathbf{x} = \mathbf{0} \} $$
+      <p>Nói cách khác, hạt nhân chính là không gian nghiệm của hệ phương trình tuyến tính thuần nhất $A\mathbf{x} = \mathbf{0}$.</p>
+      <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+      <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+ 
+  <div class="box note-box" data-id="def_image">
+      <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div>
+      <div class="box-title"><i class="fas fa-scroll"></i> Định nghĩa: Ảnh của ma trận A</div>
+      <p><span class="math-term"><strong>Ảnh</strong> (<em>Image</em>)</span> của ma trận $A$, ký hiệu là $Im(A)$, là tập hợp tất cả các vector $A\mathbf{x}$ có thể được tạo ra. Nó cũng chính là không gian được sinh bởi các vector cột của $A$.</p>
+      $$ Im(A) = \{ A\mathbf{x} \mid \mathbf{x} \in \mathbb{R}^n \} $$
+      <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+      <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+
+  <div class="box note-box" data-id="strategy">
+    <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div>
+    <div class="box-title"><i class="fas fa-chess-knight"></i> Chiến lược chung: Một công đôi việc!</div>
+    <p>Chúng ta sẽ sử dụng <strong>phép biến đổi Gauss</strong> để đưa ma trận về dạng bậc thang rút gọn. Từ dạng này, ta có thể suy ra thông tin của cả Hạt nhân và Ảnh.</p>
+    <ol>
+        <li><strong>Tìm Hạt nhân:</strong> Giải hệ $A\mathbf{x} = \mathbf{0}$ từ ma trận đã rút gọn.</li>
+        <li><strong>Tìm Ảnh:</strong> Xác định các "cột trụ" (cột chứa phần tử dẫn đầu 1) trong ma trận đã rút gọn, sau đó quay về ma trận gốc ban đầu để lấy ra các vector cột tương ứng.</li>
+    </ol>
+    <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+    <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+  
+  <h3>Ví dụ minh họa</h3>
+ 
+  <div class="box example-box" data-id="example1">
+      <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div>
+      <div class="box-title"><i class="fas fa-flask"></i> Ví dụ 1 - Mức hiểu</div>
+      <p><strong>Đề bài:</strong> Cho ma trận A. Hãy tìm một cơ sở cho không gian hạt nhân $N(A)$ và không gian ảnh $Im(A)$.</p>
+      $$ A = \begin{pmatrix} 1 & 2 & 3 & 1 \\ 1 & 3 & 5 & 2 \\ 2 & 5 & 8 & 3 \end{pmatrix} $$
+      <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+      <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+ 
+  <div class="box proof-box" data-id="solution1">
+      <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div>
+      <div class="box-title"><i class="fas fa-check"></i> Lời giải Ví dụ 1</div>
+      <p>Chúng ta sẽ dùng phép biến đổi Gauss "một mũi tên trúng hai đích"!</p>
+      <p><strong>Bước 1: Đưa ma trận A về dạng bậc thang rút gọn (RREF)</strong><br>Ta thực hiện các phép biến đổi sơ cấp trên hàng:</p>
+      $$ \begin{pmatrix} 1 & 2 & 3 & 1 \\ 1 & 3 & 5 & 2 \\ 2 & 5 & 8 & 3 \end{pmatrix} \xrightarrow[H_3 \to H_3 - 2H_1]{H_2 \to H_2 - H_1} \begin{pmatrix} 1 & 2 & 3 & 1 \\ 0 & 1 & 2 & 1 \\ 0 & 1 & 2 & 1 \end{pmatrix} \xrightarrow[H_1 \to H_1 - 2H_2]{H_3 \to H_3 - H_2} \begin{pmatrix} 1 & 0 & -1 & -1 \\ 0 & 1 & 2 & 1 \\ 0 & 0 & 0 & 0 \end{pmatrix} $$
+      <p>Đây chính là dạng RREF của A, gọi là $A'$.</p>
+      <p><strong>Bước 2: Tìm cơ sở cho Hạt nhân N(A)</strong><br>Ta giải hệ $A'\mathbf{x} = \mathbf{0}$ với $\mathbf{x} = (x_1, x_2, x_3, x_4)^T$:</p>
+      $$ \left\{ \begin{array}{r@{\ }c@{\ }r@{\ }c@{\ }r@{\ }c@{\ }r@{\ }c@{\ }r} x_1 & & & - & x_3 & - & x_4 & = & 0 \\ & & x_2 & + & 2x_3 & + & x_4 & = & 0 \end{array} \right. \implies \left\{ \begin{array}{l} x_1 = x_3 + x_4 \\ x_2 = -2x_3 - x_4 \end{array} \right. $$
+      <p>Các biến ở cột trụ (cột 1, 2) là $x_1, x_2$. Các biến còn lại là biến tự do: $x_3 = s, x_4 = t$. Nghiệm của hệ là:</p>
+      $$ \mathbf{x} = \begin{pmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{pmatrix} = \begin{pmatrix} s + t \\ -2s - t \\ s \\ t \end{pmatrix} = s \begin{pmatrix} 1 \\ -2 \\ 1 \\ 0 \end{pmatrix} + t \begin{pmatrix} 1 \\ -1 \\ 0 \\ 1 \end{pmatrix} $$
+      <p>Vậy, một cơ sở của hạt nhân $N(A)$ là: $$B_{N(A)} = \left\{ \begin{pmatrix} 1 \\ -2 \\ 1 \\ 0 \end{pmatrix}, \begin{pmatrix} 1 \\ -1 \\ 0 \\ 1 \end{pmatrix} \right\}$$</p>
+      <p><strong>Bước 3: Tìm cơ sở cho Ảnh Im(A)</strong><br>Nhìn vào ma trận RREF $A'$, ta thấy các cột 1 và 2 là các cột trụ (chứa số 1 dẫn đầu). Bây giờ, ta "gióng" lên ma trận $A$ ban đầu và lấy ra các cột tương ứng, tức là cột 1 và cột 2 của $A$. Vậy, một cơ sở của ảnh $Im(A)$ là:</p>
+      $$ B_{Im(A)} = \left\{ \begin{pmatrix} 1 \\ 1 \\ 2 \end{pmatrix}, \begin{pmatrix} 2 \\ 3 \\ 5 \end{pmatrix} \right\} $$
+      <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+      <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+ 
+  <div class="box example-box" data-id="example2">
+      <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div>
+      <div class="box-title"><i class="fas fa-flask"></i> Ví dụ 2 - Mức vận dụng</div>
+      <p><strong>Đề bài:</strong> Cho ma trận $B = \begin{pmatrix} 2 & 4 & 6 \\ 1 & 3 & 5 \\ 0 & 1 & 2 \end{pmatrix}$. Tìm cơ sở cho $N(B)$ và $Im(B)$.</p>
+      <div class="box proof-box" style="margin-top: 15px;"><div class="box-title" style="font-size: 1rem;"><i class="fas fa-check"></i> Lời giải</div><p>(Phần này để lại cho người học tự giải)</p></div>
+      <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+      <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+
+  <div class="box example-box" data-id="example3">
+      <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div>
+      <div class="box-title"><i class="fas fa-flask"></i> Ví dụ 3 - Mức sáng tạo</div>
+      <p><strong>Đề bài:</strong> Nếu ma trận $C$ có hạng bằng 2 và có 4 cột, hỏi không gian hạt nhân $N(C)$ có số chiều là bao nhiêu? Giải thích.</p>
+      <div class="box proof-box" style="margin-top: 15px;"><div class="box-title" style="font-size: 1rem;"><i class="fas fa-check"></i> Lời giải</div><p>(Phần này để lại cho người học tự giải)</p></div>
+      <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+      <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+ 
+  <div class="section-container"><h2>3. Bài tập tự luyện</h2></div>
+  
+  <h3>Mức độ HIỂU</h3>
+  <div class="box exercise-box" data-id="ex1"><div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div><div class="box-title"><i class="fas fa-puzzle-piece"></i> Bài tập 1</div><p>Tìm một cơ sở của không gian hạt nhân cho ma trận sau: $ B = \begin{pmatrix} 1 & 2 & -3 \\ 2 & 4 & -6 \end{pmatrix} $</p><div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div><div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)"></div>
+  <div class="box exercise-box" data-id="ex2"><div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div><div class="box-title"><i class="fas fa-puzzle-piece"></i> Bài tập 2</div><p>Tìm hạt nhân của ma trận: $ C = \begin{pmatrix} 1 & 1 & 0 \\ 0 & 1 & 1 \\ 1 & 0 & 1 \end{pmatrix} $</p><div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div><div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)"></div>
+  <div class="box exercise-box" data-id="ex3"><div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div><div class="box-title"><i class="fas fa-puzzle-piece"></i> Bài tập 3</div><p>Cho ma trận $D = \begin{pmatrix} 2 & -1 \\ 4 & -2 \end{pmatrix}$. Tìm cả hạt nhân và ảnh của D.</p><div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div><div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)"></div>
+  
+  <h3>Mức độ VẬN DỤNG</h3>
+  <div class="box exercise-box" data-id="ex4"><div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div><div class="box-title"><i class="fas fa-puzzle-piece"></i> Bài tập 4</div><p>Tìm một cơ sở cho không gian hạt nhân và không gian ảnh của ma trận: $ E = \begin{pmatrix} 1 & 0 & 2 \\ 0 & 1 & -1 \\ 1 & 1 & 1 \end{pmatrix} $</p><div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div><div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)"></div>
+  <div class="box exercise-box" data-id="ex5"><div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div><div class="box-title"><i class="fas fa-puzzle-piece"></i> Bài tập 5</div><p>Cho ma trận $F = \begin{pmatrix} 1 & 2 & 1 & 0 \\ 2 & 4 & 0 & 1 \\ 3 & 6 & 1 & 1 \end{pmatrix}$. Tìm cơ sở cho $N(F)$ và $Im(F)$.</p><div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div><div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)"></div>
+  
+  <h3>Mức độ SÁNG TẠO</h3>
+  <div class="box exercise-box" data-id="ex7"><div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div><div class="box-title"><i class="fas fa-puzzle-piece"></i> Bài tập 7</div><p>Cho $A$ là một ma trận kích thước $4 \times 6$. Nếu không gian ảnh $Im(A)$ có số chiều là 3, hãy cho biết số chiều của không gian hạt nhân $N(A)$ là bao nhiêu? Tại sao? (Gợi ý: Nhớ về định lý hạng-số chiều).</p><div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div><div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)"></div>
+  <div class="box exercise-box" data-id="ex8"><div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div><div class="box-title"><i class="fas fa-puzzle-piece"></i> Bài tập 8</div><p>Chứng minh rằng nếu $A$ là ma trận vuông khả nghịch thì $N(A) = \{\mathbf{0}\}$ và $Im(A)$ là toàn bộ không gian.</p><div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div><div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)"></div>
+
+  <div class="section-container"><h2>4. Đáp án/Gợi ý lời giải</h2></div>
+ 
+  <div class="box proof-box" data-id="answers">
+      <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div>
+      <div class="box-title"><i class="fas fa-check"></i> Đáp án/Gợi ý</div>
+      <p><strong>Bài 1:</strong> Một cơ sở của $N(B)$ là $\left\{ \begin{pmatrix} -2 \\ 1 \\ 0 \end{pmatrix}, \begin{pmatrix} 3 \\ 0 \\ 1 \end{pmatrix} \right\}$.</p>
+      <p><strong>Bài 2:</strong> RREF của C là $\begin{pmatrix} 1 & 0 & -1 \\ 0 & 1 & 1 \\ 0 & 0 & 0 \end{pmatrix}$. Cơ sở $N(C) = \left\{ \begin{pmatrix} 1 \\ -1 \\ 1 \end{pmatrix} \right\}$.</p>
+      <p><strong>Bài 3:</strong> RREF của D là $\begin{pmatrix} 1 & -1/2 \\ 0 & 0 \end{pmatrix}$.
+          <ul>
+              <li>Cơ sở $N(D) = \left\{ \begin{pmatrix} 1/2 \\ 1 \end{pmatrix} \right\}$.</li>
+              <li>Cơ sở $Im(D) = \left\{ \begin{pmatrix} 2 \\ 4 \end{pmatrix} \right\}$.</li>
+          </ul></p>
+      <p><strong>Bài 4:</strong> RREF của E là $\begin{pmatrix} 1 & 0 & 2 \\ 0 & 1 & -1 \\ 0 & 0 & 0 \end{pmatrix}$.
+          <ul>
+              <li>Cơ sở $N(E) = \left\{ \begin{pmatrix} -2 \\ 1 \\ 1 \end{pmatrix} \right\}$.</li>
+              <li>Cơ sở $Im(E) = \left\{ \begin{pmatrix} 1 \\ 0 \\ 1 \end{pmatrix}, \begin{pmatrix} 0 \\ 1 \\ 1 \end{pmatrix} \right\}$ (lấy từ 2 cột đầu của E).</li>
+          </ul></p>
+      <p><strong>Bài 7:</strong> Theo định lý hạng-số chiều (Rank-Nullity Theorem), ta có: $rank(A) + dim(N(A)) = n$ (số cột của A). Ở đây, $rank(A) = dim(Im(A)) = 3$ và $n = 6$. Vậy, $3 + dim(N(A)) = 6 \implies dim(N(A)) = 3$.</p>
+      <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+      <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+ 
+  <div class="box note-box" data-id="pedagogy_note">
+      <div class="reset-trigger-left" title="Click để reset slide này" onclick="resetSingleSlide(this)"></div><div class="trigger-top"><div class="trigger-bar trigger-image-link" onclick="promptImageUrl(this)"></div></div><div class="trigger-right" onclick="promptAppUrl(this)"></div>
+      <div class="box-title"><i class="fas fa-chalkboard-teacher"></i> Lưu ý sư phạm</div>
+      <ul>
+          <li>Nhấn mạnh "một công đôi việc": Phép biến đổi Gauss là chìa khóa vạn năng cho cả hai bài toán.</li>
+          <li>Cần phân biệt rõ: Để tìm cơ sở cho <strong>Hạt nhân</strong>, ta giải hệ phương trình từ ma trận <strong>đã rút gọn</strong>. Để tìm cơ sở cho <strong>Ảnh</strong>, ta phải quay về lấy cột từ ma trận <strong>gốc ban đầu</strong>. Đây là lỗi học sinh hay nhầm lẫn.</li>
+      </ul>
+      <div class="media-content-area"><img class="image-preview" alt="Xem trước"><div class="image-placeholder">(Khu vực hiển thị ảnh/ứng dụng)</div><div class="embed-app-container"></div><div class="audio-container"><div class="custom-audio-player"><div class="play-pause-btn"></div></div><div class="embed-audio-container"></div><audio></audio></div></div>
+      <div class="triggers-bottom"><div class="trigger-bar trigger-audio" onclick="promptAudio(this)"></div><div class="trigger-bar trigger-image-file" onclick="triggerFileInput(this)"></div></div><input type="file" class="file-input" onchange="handleFileInput(this)">
+  </div>
+ 
+</div>
+ 
+<script>
+  function resetSingleSlide(triggerElement) { const box = triggerElement.closest('.box'); if (!box) return; const slideId = box.dataset.id; if (!slideId) return; const titleText = box.querySelector('.box-title').innerText.trim(); if (confirm(`Bạn có chắc muốn reset nội dung của slide "${titleText}" không?`)) { localStorage.removeItem(`mediaImage_${slideId}`); localStorage.removeItem(`mediaAudio_${slideId}`); localStorage.removeItem(`mediaApp_${slideId}`); location.reload(); } }
+  function getMediaElements(triggerElement) { const box = triggerElement.closest('.box'); if (!box) return null; return { id: box.dataset.id, box: box, mediaArea: box.querySelector('.media-content-area'), preview: box.querySelector('.image-preview'), placeholder: box.querySelector('.image-placeholder'), audioContainer: box.querySelector('.audio-container'), customPlayer: box.querySelector('.custom-audio-player'), embedAudioContainer: box.querySelector('.audio-container .embed-audio-container'), audioPlayer: box.querySelector('audio'), playBtn: box.querySelector('.play-pause-btn'), fileInput: box.querySelector('.file-input'), appContainer: box.querySelector('.embed-app-container'), }; }
+  function updatePlaceholderVisibility(elements) { if (!elements || !elements.placeholder || !elements.mediaArea) return; const imageVisible = elements.preview && elements.preview.style.display === 'block'; const appVisible = elements.appContainer && elements.appContainer.style.display === 'block'; const audioVisible = (elements.customPlayer && elements.customPlayer.style.display !== 'none') || (elements.embedAudioContainer && elements.embedAudioContainer.style.display !== 'none'); if (imageVisible || appVisible || audioVisible) { elements.mediaArea.style.display = 'block'; } else { elements.mediaArea.style.display = 'none'; } elements.placeholder.style.display = (imageVisible || appVisible) ? 'none' : 'flex'; }
+  function showImage(elements, src) { if (!elements) return; elements.preview.src = src; elements.preview.style.display = 'block'; updatePlaceholderVisibility(elements); }
+  function promptImageUrl(trigger) { const url = prompt('Nhập link ảnh (URL):'); const elements = getMediaElements(trigger); if (url && elements) { localStorage.setItem(`mediaImage_${elements.id}`, url); showImage(elements, url); } }
+  function handleFileInput(input) { const file = input.files[0]; const elements = getMediaElements(input); if (file && elements) { const reader = new FileReader(); reader.onload = (e) => { localStorage.setItem(`mediaImage_${elements.id}`, e.target.result); showImage(elements, e.target.result); }; reader.readAsDataURL(file); } }
+  function triggerFileInput(trigger) { const elements = getMediaElements(trigger); if (elements && elements.fileInput) { elements.fileInput.click(); } }
+  function showAudio(elements, audioData) { if (!elements) return; elements.customPlayer.style.display = 'none'; elements.embedAudioContainer.style.display = 'none'; elements.embedAudioContainer.innerHTML = ''; elements.audioPlayer.src = ''; if (audioData.trim().startsWith('<')) { const cleaned = audioData.replace(/<br.*?>\s*<a.*?voca\.ro.*?<\/a>/i, ''); elements.embedAudioContainer.innerHTML = cleaned; elements.embedAudioContainer.style.display = 'block'; } else { elements.audioPlayer.src = audioData; elements.customPlayer.style.display = 'flex'; } updatePlaceholderVisibility(elements); }
+  function promptAudio(trigger) { const input = prompt('Nhập link âm thanh (.mp3) hoặc mã nhúng:'); const elements = getMediaElements(trigger); if (input && input.trim() !== '' && elements) { localStorage.setItem(`mediaAudio_${elements.id}`, input); showAudio(elements, input); } }
+  function setupCustomAudioPlayer(elements) { if (!elements || elements.box.dataset.playerSetup === 'true') return; const togglePlay = () => { if (elements.audioPlayer.paused) elements.audioPlayer.play(); else elements.audioPlayer.pause(); }; elements.customPlayer?.addEventListener('click', togglePlay); elements.audioPlayer?.addEventListener('play', () => elements.playBtn?.classList.add('playing')); elements.audioPlayer?.addEventListener('pause', () => elements.playBtn?.classList.remove('playing')); elements.audioPlayer?.addEventListener('ended', () => elements.playBtn?.classList.remove('playing')); elements.box.dataset.playerSetup = 'true'; }
+  function showApp(elements, url) { if (!elements) return; elements.appContainer.innerHTML = `<iframe src="${url}"></iframe>`; elements.appContainer.style.display = 'block'; updatePlaceholderVisibility(elements); }
+  function promptAppUrl(trigger) { const url = prompt('Nhập link của ứng dụng hoặc trang web để nhúng:'); const elements = getMediaElements(trigger); if (url && elements) { localStorage.setItem(`mediaApp_${elements.id}`, url); showApp(elements, url); } }
+  document.addEventListener('DOMContentLoaded', () => { document.querySelectorAll('.box[data-id]').forEach((box) => { const elements = getMediaElements(box); if (!elements) return; const imgData = localStorage.getItem(`mediaImage_${elements.id}`); if (imgData) showImage(elements, imgData); const audioData = localStorage.getItem(`mediaAudio_${elements.id}`); if (audioData) showAudio(elements, audioData); const appData = localStorage.getItem(`mediaApp_${elements.id}`); if (appData) showApp(elements, appData); const embedAudio = elements.embedAudioContainer?.querySelector('iframe'); if (embedAudio && embedAudio.getAttribute('src')) { showAudio(elements, embedAudio.outerHTML); } setupCustomAudioPlayer(elements); }); });
+</script>
+ 
+</body>
+</html>
