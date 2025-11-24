@@ -1,0 +1,556 @@
+
+      <!DOCTYPE html>
+      <html lang="vi">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bài Giảng GenSlide AI</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script>
+          window.MathJax = {
+            tex: {
+              inlineMath: [['\\(', '\\)']], 
+              displayMath: [['\\[', '\\]']]
+            },
+            svg: {
+              fontCache: 'global'
+            }
+          };
+        </script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <style>
+          body {
+            background-color: #0f172a;
+            margin: 0;
+            padding: 30px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Lora', serif;
+          }
+          .main-title-container {
+            width: 1280px;
+            text-align: center;
+            margin-bottom: 30px;
+          }
+          .main-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            font-size: 58px;
+            color: white;
+            margin: 0;
+            line-height: 1.1;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+          }
+          .main-subtitle {
+            font-family: 'Dancing Script', cursive;
+            font-weight: 700;
+            font-size: 28px;
+            color: #e0f2fe;
+            margin-top: 16px;
+            opacity: 0.95;
+            line-height: 1.4;
+          }
+          
+          /* Slide Styles */
+          .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid #334155;
+            margin-bottom: 24px;
+            flex-shrink: 0;
+          }
+          .absolute { position: absolute; }
+          .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+          .bg-cover { background-size: cover; }
+          .bg-center { background-position: center; }
+          
+          .slide-bg-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.70);
+            z-index: 1;
+          }
+          .slide-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 40px 80px 30px;
+            z-index: 3;
+            box-sizing: border-box;
+          }
+          .slide-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            font-size: 56px;
+            color: white;
+            margin: 0;
+            line-height: 1.1;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+          }
+          .slide-subtitle {
+            font-family: 'Dancing Script', cursive;
+            font-weight: 700;
+            font-size: 26px;
+            color: #e0f2fe;
+            margin-top: 14px;
+            opacity: 0.95;
+            line-height: 1.4;
+          }
+          .slide-content-area {
+            position: absolute;
+            top: 180px;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 60px;
+            box-sizing: border-box;
+            z-index: 2;
+          }
+
+          /* ONE COLUMN */
+          .main-content {
+            width: 100%;
+            max-width: 800px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+          }
+
+          /* TWO COLUMN */
+          .two-column {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            max-width: 1000px;
+            align-items: flex-start;
+          }
+          .two-column > div {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+          }
+
+          .card {
+            background: rgba(30, 58, 138, 0.3);
+            border-left: 4px solid #7dd3fc;
+            border-radius: 0 12px 12px 0;
+            padding: 22px;
+            margin-bottom: 22px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+          }
+          .card-title {
+            font-family: 'Lora', serif;
+            font-weight: 500;
+            font-size: 21px;
+            color: #bae6fd;
+            margin-bottom: 10px;
+          }
+          .card-content {
+            font-family: 'Lora', serif;
+            font-size: 26px;
+            font-weight: 500;
+            color: white;
+            line-height: 1.35;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="main-title-container">
+          <h1 class="main-title">Bài Giảng GenSlide AI</h1>
+          <p class="main-subtitle">Được tạo tự động với nội dung và bố cục tối ưu</p>
+        </div>
+        
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/german language book/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Tính từ Sở hữu trong tiếng Đức</h2>
+          <p class="slide-subtitle">Cách 1 (Nominativ) & Cách 3 (Dativ)</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Tính từ sở hữu là gì?</div>
+            <div class="card-content">Chỉ sự sở hữu hoặc mối quan hệ.</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Quan trọng</div>
+            <div class="card-content">Thay đổi đuôi theo giống, số và cách của danh từ mà nó bổ nghĩa.</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">menu_book</i>
+              <span>Ngữ pháp tiếng Đức A1-A2</span>
+            </div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">school</i>
+              <span>Đối tượng: Người học cơ bản</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">schedule</i>
+              <span>Thời lượng: 15 phút</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/grammar rules chart/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Tính từ Sở hữu Cơ bản</h2>
+          <p class="slide-subtitle">Hình thức gốc theo chủ ngữ</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">ich (tôi)</div>
+            <div class="card-content">\\( \\text{mein-} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">du (bạn)</div>
+            <div class="card-content">\\( \\text{dein-} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">er/es (anh ấy/nó)</div>
+            <div class="card-content">\\( \\text{sein-} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">sie (cô ấy)</div>
+            <div class="card-content">\\( \\text{ihr-} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">wir (chúng tôi)</div>
+            <div class="card-content">\\( \\text{unser-} \\)</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-title">ihr (các bạn)</div>
+            <div class="card-content">\\( \\text{euer-} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">sie/Sie (họ/Ngài)</div>
+            <div class="card-content">\\( \\text{ihr-/Ihr-} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">person</i>
+              <span>Chủ ngữ</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">star</i>
+              <span>Tính từ sở hữu</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/german grammar nominative/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Tính từ Sở hữu ở Cách 1 (Nominativ)</h2>
+          <p class="slide-subtitle">Chủ ngữ hoặc bổ ngữ cho chủ ngữ</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Danh từ Giống Đực (Maskulin)</div>
+            <div class="card-content">\\( \\text{mein Vater} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Danh từ Giống Cái (Feminin)</div>
+            <div class="card-content">\\( \\text{meine Mutter} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Danh từ Giống Trung (Neutrum)</div>
+            <div class="card-content">\\( \\text{mein Kind} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Danh từ Số nhiều (Plural)</div>
+            <div class="card-content">\\( \\text{meine Eltern} \\)</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Quy tắc đuôi</div>
+            <div class="card-content">\\begin{array}{|l|c|}\\hline\\text{Giống/Số}&\\text{Đuôi}\\\\\\\\hline\\text{Nam}&\\text{-(không)}\\\\\\\\text{Nữ}&\\text{-e}\\\\\\\\text{Trung}&\\text{-(không)}\\\\\\\\text{Số nhiều}&\\text{-e}\\\\\\\\hline\\end{array}</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">rule</i>
+              <span>Đuôi tính từ sở hữu thay đổi theo giống & số của danh từ</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">info</i>
+              <span>Nominativ: Ai? Cái gì?</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/german grammar dative/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Tính từ Sở hữu ở Cách 3 (Dativ)</h2>
+          <p class="slide-subtitle">Bổ ngữ gián tiếp của câu</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Danh từ Giống Đực (Maskulin)</div>
+            <div class="card-content">\\( \\text{mit meinem Vater} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Danh từ Giống Cái (Feminin)</div>
+            <div class="card-content">\\( \\text{mit meiner Mutter} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Danh từ Giống Trung (Neutrum)</div>
+            <div class="card-content">\\( \\text{mit meinem Kind} \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Danh từ Số nhiều (Plural)</div>
+            <div class="card-content">\\( \\text{mit meinen Eltern} \\)</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Quy tắc đuôi</div>
+            <div class="card-content">\\begin{array}{|l|c|}\\hline\\text{Giống/Số}&\\text{Đuôi}\\\\\\\\hline\\text{Nam}&\\text{-em}\\\\\\\\text{Nữ}&\\text{-er}\\\\\\\\text{Trung}&\\text{-em}\\\\\\\\text{Số nhiều}&\\text{-en}\\\\\\\\hline\\end{array}</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">rule</i>
+              <span>Đuôi tính từ sở hữu thay đổi theo giống & số của danh từ</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">info</i>
+              <span>Dativ: Với ai? Cho ai?</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/summary table german/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Tóm tắt & So sánh</h2>
+          <p class="slide-subtitle">Các đuôi của Tính từ Sở hữu</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="main-content">
+            
+        <div class="card">
+          
+            <div class="card-title">Bảng tổng hợp</div>
+            <div class="card-content">\\begin{array}{|l|c|c|}\\hline\\text{Giống/Số}&\\text{Cách 1 (Nominativ)}&\\text{Cách 3 (Dativ)}\\\\\\\\hline\\text{Nam}&\\text{-(không)}&\\text{-em}\\\\\\\\text{Nữ}&\\text{-e}&\\text{-er}\\\\\\\\text{Trung}&\\text{-(không)}&\\text{-em}\\\\\\\\text{Số nhiều}&\\text{-e}&\\text{-en}\\\\\\\\hline\\end{array}</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">visibility</i>
+              <span>Ghi nhớ các đuôi để áp dụng đúng cách</span>
+            </div>
+          
+        </div>
+      
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/practice exercise/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Thực hành</h2>
+          <p class="slide-subtitle">Áp dụng vào câu để củng cố kiến thức</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Câu 1</div>
+            <div class="card-content">Das ist ___ Buch. (mein, Neutrum, Nominativ) -> Das ist mein Buch.</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Câu 2</div>
+            <div class="card-content">Ich spreche mit ___ Lehrerin. (ihr, Feminin, Dativ) -> Ich spreche mit ihrer Lehrerin.</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Câu 3</div>
+            <div class="card-content">Wir helfen ___ Freunden. (unser, Plural, Dativ) -> Wir helfen unseren Freunden.</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Câu 4</div>
+            <div class="card-content">Ist das ___ Auto? (dein, Neutrum, Nominativ) -> Ist das dein Auto?</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">edit</i>
+              <span>Hãy điền dạng đúng của tính từ sở hữu</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content" style="display: flex; align-items: flex-start;">
+              <i class="material-icons" style="margin-right: 12px; font-size: 28px; color: #7dd3fc;">quiz</i>
+              <span>Kiểm tra sự hiểu biết của bạn</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      </body>
+      </html>
+    
