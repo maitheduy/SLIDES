@@ -1,0 +1,742 @@
+
+      <!DOCTYPE html>
+      <html lang="vi">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Bài Giảng GenSlide AI</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Dancing+Script:wght@600;700&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script>
+          window.MathJax = {
+            tex: {
+              inlineMath: [['\\(', '\\)']], 
+              displayMath: [['\\[', '\\]']],
+              processEscapes: true
+            },
+            svg: {
+              fontCache: 'global'
+            }
+          };
+        </script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <style>
+          body {
+            background-color: #0f172a;
+            margin: 0;
+            padding: 30px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Lora', serif;
+          }
+          .main-title-container {
+            width: 1280px;
+            text-align: center;
+            margin-bottom: 30px;
+          }
+          .main-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            font-size: 58px;
+            color: white;
+            margin: 0;
+            line-height: 1.1;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+          }
+          .main-subtitle {
+            font-family: 'Dancing Script', cursive;
+            font-weight: 700;
+            font-size: 28px;
+            color: #e0f2fe;
+            margin-top: 16px;
+            opacity: 0.95;
+            line-height: 1.4;
+          }
+          
+          /* Slide Styles */
+          .slide-container {
+            width: 1280px;
+            height: 720px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid #334155;
+            margin-bottom: 24px;
+            flex-shrink: 0;
+          }
+          .absolute { position: absolute; }
+          .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+          .bg-cover { background-size: cover; }
+          .bg-center { background-position: center; }
+          
+          .slide-bg-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.70);
+            z-index: 1;
+          }
+          .slide-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 40px 80px 30px;
+            z-index: 3;
+            box-sizing: border-box;
+          }
+          .slide-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 800;
+            font-size: 56px;
+            color: white;
+            margin: 0;
+            line-height: 1.1;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+          }
+          .slide-subtitle {
+            font-family: 'Dancing Script', cursive;
+            font-weight: 700;
+            font-size: 26px;
+            color: #e0f2fe;
+            margin-top: 14px;
+            opacity: 0.95;
+            line-height: 1.4;
+          }
+          .slide-content-area {
+            position: absolute;
+            top: 180px;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 60px;
+            box-sizing: border-box;
+            z-index: 2;
+          }
+
+          /* ONE COLUMN */
+          .main-content {
+            width: 100%;
+            max-width: 800px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+          }
+
+          /* TWO COLUMN */
+          .two-column {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            max-width: 1000px;
+          }
+          .two-column > div {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+          }
+
+          .card {
+            background: rgba(30, 58, 138, 0.3);
+            border-left: 4px solid #7dd3fc;
+            border-radius: 0 12px 12px 0;
+            padding: 22px;
+            margin-bottom: 22px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+          }
+          .card-title {
+            font-family: 'Lora', serif;
+            font-weight: 500;
+            font-size: 21px;
+            color: #bae6fd;
+            margin-bottom: 10px;
+          }
+          .card-content {
+            font-family: 'Lora', serif;
+            font-size: 26px;
+            font-weight: 500;
+            color: white;
+            line-height: 1.35;
+          }
+          .card-icon {
+            display: flex;
+            align-items: flex-start;
+          }
+          .card-icon i {
+            margin-right: 12px;
+            font-size: 28px;
+            color: #7dd3fc;
+            margin-top: 4px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="main-title-container">
+          <h1 class="main-title">Bài Giảng GenSlide AI</h1>
+          <p class="main-subtitle">Được tạo tự động với nội dung và bố cục tối ưu</p>
+        </div>
+        
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/german grammar book/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Giới Thiệu: Các Cách Trong Tiếng Đức</h2>
+          <p class="slide-subtitle">Hiểu Rõ Về Cách 3 (Dativ) & Cách 4 (Akkusativ)</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Cách 1 (Nominativ)</div>
+            <div class="card-content">Chủ ngữ của câu</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Cách 4 (Akkusativ)</div>
+            <div class="card-content">Tân ngữ trực tiếp</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Cách 3 (Dativ)</div>
+            <div class="card-content">Tân ngữ gián tiếp</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">menu_book</i>
+              <span>Ngữ pháp tiếng Đức cơ bản</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">school</i>
+              <span>Trong môi trường học đường</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">person</i>
+              <span>Dành cho học sinh</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/school classroom/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Cách 4 (Akkusativ)</h2>
+          <p class="slide-subtitle">Đối tượng chịu tác động trực tiếp của hành động</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Mạo từ xác định</div>
+            <div class="card-content">\\( der \\rightarrow den \\), \\( die \\rightarrow die \\), \\( das \\rightarrow das \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Mạo từ không xác định</div>
+            <div class="card-content">\\( ein \\rightarrow einen \\), \\( eine \\rightarrow eine \\), \\( ein \\rightarrow ein \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Ví dụ (Trường học)</div>
+            <div class="card-content">Ich sehe \\( den Lehrer \\) (Tôi nhìn thấy giáo viên). Die Schüler lesen \\( ein Buch \\) (Các học sinh đọc một cuốn sách).</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">question_answer</i>
+              <span>Trả lời câu hỏi: Wen? (Ai?), Was? (Cái gì?)</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">arrow_right_alt</i>
+              <span>Tân ngữ trực tiếp</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/library books/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Cách 4 (Akkusativ): Giới từ & Ví dụ</h2>
+          <p class="slide-subtitle">Các giới từ luôn đi với Akkusativ</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Giới từ Akkusativ</div>
+            <div class="card-content">durch, für, gegen, ohne, um, entlang</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Ví dụ 1</div>
+            <div class="card-content">Wir gehen \\( durch den Park \\). (Chúng tôi đi xuyên qua công viên).</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Ví dụ 2</div>
+            <div class="card-content">Ich kaufe \\( ein Geschenk für meinen Freund \\). (Tôi mua một món quà cho bạn tôi).</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">link</i>
+              <span>Giới từ cố định</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">lightbulb</i>
+              <span>Cần ghi nhớ</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/students learning/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Cách 3 (Dativ)</h2>
+          <p class="slide-subtitle">Đối tượng nhận lợi ích hoặc chịu ảnh hưởng gián tiếp</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Mạo từ xác định</div>
+            <div class="card-content">\\( der \\rightarrow dem \\), \\( die \\rightarrow der \\), \\( das \\rightarrow dem \\), \\( die (pl) \\rightarrow den \\) (+n)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Mạo từ không xác định</div>
+            <div class="card-content">\\( ein \\rightarrow einem \\), \\( eine \\rightarrow einer \\), \\( ein \\rightarrow einem \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Ví dụ (Trường học)</div>
+            <div class="card-content">Ich helfe \\( dem Schüler \\) (Tôi giúp học sinh). Die Lehrerin gibt \\( den Kindern \\) Bücher (Cô giáo đưa sách cho bọn trẻ).</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">question_answer</i>
+              <span>Trả lời câu hỏi: Wem? (Cho ai?), Was? (Cho cái gì?)</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">share</i>
+              <span>Tân ngữ gián tiếp</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/school hallway/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Cách 3 (Dativ): Giới từ & Ví dụ</h2>
+          <p class="slide-subtitle">Các giới từ luôn đi với Dativ</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Giới từ Dativ</div>
+            <div class="card-content">aus, außer, bei, mit, nach, seit, von, zu</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Ví dụ 1</div>
+            <div class="card-content">Ich komme \\( aus Vietnam \\). (Tôi đến từ Việt Nam).</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Ví dụ 2</div>
+            <div class="card-content">Ich spreche \\( mit meinem Freund \\). (Tôi nói chuyện với bạn tôi).</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Ví dụ 3</div>
+            <div class="card-content">Wir gehen \\( zur Schule \\) (zu der Schule). (Chúng tôi đi đến trường).</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">collections_bookmark</i>
+              <span>Danh sách giới từ quan trọng</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">group</i>
+              <span>Thể hiện mối quan hệ</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/path crossroads/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Phân Biệt Cách 3 & Cách 4</h2>
+          <p class="slide-subtitle">Quy tắc đơn giản để nhận diện đúng cách</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Cách 4 (Akkusativ)</div>
+            <div class="card-content">Trả lời: \\( Wen? \\) / \\( Was? \\) (Đối tượng trực tiếp chịu hành động)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Cách 3 (Dativ)</div>
+            <div class="card-content">Trả lời: \\( Wem? \\) / \\( Was? \\) (Đối tượng nhận hoặc hưởng lợi gián tiếp)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Ví dụ chung</div>
+            <div class="card-content">Ich gebe \\( meinem Bruder \\) (Dativ) \\( ein Buch \\) (Akkusativ). (Tôi đưa anh trai tôi một cuốn sách).</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">compare_arrows</i>
+              <span>So sánh chức năng</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">rule</i>
+              <span>Mẹo ghi nhớ</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/study desk/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Tổng Kết & Thực Hành</h2>
+          <p class="slide-subtitle">Nắm vững Cách 3 và Cách 4 để giao tiếp tự tin</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Cách 4 (Akkusativ)</div>
+            <div class="card-content">Đối tượng trực tiếp: \\( Wen?, Was? \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Cách 3 (Dativ)</div>
+            <div class="card-content">Đối tượng gián tiếp: \\( Wem?, Was? \\)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Lời khuyên</div>
+            <div class="card-content">Học động từ và giới từ đi kèm với từng cách</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">check_circle</i>
+              <span>Các điểm ngữ pháp chính</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">edit_note</i>
+              <span>Thực hành qua bài tập</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/family love home/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Tính Từ Sở Hữu Trong Gia Đình</h2>
+          <p class="slide-subtitle">Ví Dụ Minh Họa Cách Sử Dụng</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Tính từ sở hữu</div>
+            <div class="card-content">\\text{tôi} (mein)</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Chức năng</div>
+            <div class="card-content">\\text{Thể hiện sự sở hữu hoặc quan hệ (Zeigt Besitz oder Beziehung)}</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Ví dụ 1</div>
+            <div class="card-content">\\text{Bố mẹ \\underline{tôi} (Meine Eltern)}</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">Ví dụ 2</div>
+            <div class="card-content">\\text{sinh nhật của \\underline{tôi} (mein Geburtstag)}</div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">gift</i>
+              <span>Bố mẹ tôi tặng quà cho tôi nhân ngày sinh nhật của tôi. (Meine Eltern schenken mir Geschenke zu meinem Geburtstag.)</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">favorite</i>
+              <span>Tôi yêu bố mẹ tôi. (Ich liebe meine Eltern.)</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">home</i>
+              <span>Bố mẹ tôi sống ở tỉnh Thanh Hóa. (Meine Eltern leben in der Provinz Thanh Hóa.)</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      <div class="slide-container">
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://picsum.photos/seed/family support/1280/720.jpg')"></div>
+        <div class="slide-bg-overlay"></div>
+        <div class="slide-header">
+          <h2 class="slide-title">Chủ Đề: Cha Mẹ Của Tôi</h2>
+          <p class="slide-subtitle">Khám phá cách sử dụng 'meinen Eltern' trong tiếng Đức qua các ví dụ thực tế.</p>
+        </div>
+        <div class="slide-content-area">
+          
+          <div class="two-column">
+            <div>
+        <div class="card">
+          
+            <div class="card-title">Eltern (số nhiều)</div>
+            <div class="card-content">\\text{Eltern} \\rightarrow \\text{Cha mẹ}</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">meine Eltern</div>
+            <div class="card-content">\\text{Là cách nói số nhiều sở hữu 'cha mẹ của tôi' ở Nominativ hoặc Akkusativ}</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-title">meinen Eltern</div>
+            <div class="card-content">\\text{Là dạng Dativ số nhiều của 'meine Eltern', dùng khi 'cha mẹ' là tân ngữ gián tiếp.}</div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">favorite</i>
+              <span>Tôi thường xuyên giúp đỡ cha mẹ tôi trong công việc nhà. (Ich helfe meinen Eltern oft im Haushalt.)</span>
+            </div>
+          
+        </div>
+      </div>
+            <div>
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">thumb_up</i>
+              <span>Tôi rất biết ơn cha mẹ tôi vì tất cả những gì họ đã làm cho tôi. (Ich bin meinen Eltern sehr dankbar für alles, was sie für mich getan haben.)</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">chat</i>
+              <span>Tôi kể cho cha mẹ tôi nghe về những trải nghiệm hàng ngày của mình. (Ich erzähle meinen Eltern von meinen täglichen Erlebnissen.)</span>
+            </div>
+          
+        </div>
+      
+        <div class="card">
+          
+            <div class="card-content card-icon">
+              <i class="material-icons">card_giftcard</i>
+              <span>Tôi đã mua một món quà nhỏ để tặng cho cha mẹ tôi vào dịp đặc biệt. (Ich habe meinen Eltern ein kleines Geschenk zu einem besonderen Anlass gekauft.)</span>
+            </div>
+          
+        </div>
+      </div>
+          </div>
+        
+        </div>
+      </div>
+      
+      </body>
+      </html>
+    
